@@ -12,3 +12,29 @@
   "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkMTNlMzRmMS1jZTcwLTQ0MmMtODg4Mi0zMGQ1Zjc4ODQ1YTUiLCJleHAiOjE3ODI0MTEyMDd9.48nLChPWXegZu5FwX-OJ9SVQOqiLUBuks_8MutXQ6_Y",
   "token_type": "bearer"
 }
+{
+  "key_id": "096642b4-3ded-4385-abf3-f73fb7359e57",
+  "key_name": "test1_key1",
+  "raw_key": "kmgg_live_e842ca8e82bd8811e46b5005cee7aee186692db78b80425eb15286d9b21a5778"
+}
+[
+  {
+    "id": "908997fa-0087-4629-bf78-8acc7e0fcc98",
+    "user_id": "d13e34f1-ce70-442c-8882-30d5f78845a5",
+    "name": "test1_key1",
+    "is_active": true,
+    "created_at": "2026-06-25T17:49:46.736038Z"
+  },
+  {
+    "id": "096642b4-3ded-4385-abf3-f73fb7359e57",
+    "user_id": "d13e34f1-ce70-442c-8882-30d5f78845a5",
+    "name": "test1_key1",
+    "is_active": true,
+    "created_at": "2026-06-25T17:53:41.287596Z"
+  }
+]
+
+
+{
+  "message": "user_idd13e34f1-ce70-442c-8882-30d5f78845a5 key revoked successfully"
+}
