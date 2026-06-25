@@ -1,0 +1,15 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Environments & Packages
+venv/
+.venv/
+.egg-info/
+
+# Secret configuration keys
+.env
+
+# Local development databases
+*.db
+*.sqlite3
