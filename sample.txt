@@ -1,0 +1,14 @@
+{
+  "email": "test1@test.com",
+  "password": "Test1@test"
+}
+
+{
+  "message": "User registered successfully",
+  "user_id": "d13e34f1-ce70-442c-8882-30d5f78845a5",
+  "email": "test1@test.com"
+}
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkMTNlMzRmMS1jZTcwLTQ0MmMtODg4Mi0zMGQ1Zjc4ODQ1YTUiLCJleHAiOjE3ODI0MTEyMDd9.48nLChPWXegZu5FwX-OJ9SVQOqiLUBuks_8MutXQ6_Y",
+  "token_type": "bearer"
+}

@@ -13,3 +13,7 @@ venv/
 # Local development databases
 *.db
 *.sqlite3
+
+sample.txt
+.sample
+
