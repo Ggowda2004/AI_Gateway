@@ -17,6 +17,12 @@
   "key_name": "test1_key1",
   "raw_key": "kmgg_live_e842ca8e82bd8811e46b5005cee7aee186692db78b80425eb15286d9b21a5778"
 }
+{
+  "key_id": "8b20b706-4d8b-4fec-a365-4577ddb08208",
+  "key_name": "chat_test_key1",
+  "raw_key": "kmgg_live_8542d70c2842574ff3c5d56eea17ceee55dc922e0c8992f0aa312e22dab8742a"
+}
+
 [
   {
     "id": "908997fa-0087-4629-bf78-8acc7e0fcc98",
@@ -37,4 +43,11 @@
 
 {
   "message": "user_idd13e34f1-ce70-442c-8882-30d5f78845a5 key revoked successfully"
+}
+
+
+{
+  "status": "success",
+  "reply": "This is a placeholder AI response to your message: 'this is the test message 1'",
+  "user_context": "Authenticated via user account: test1@test.com"
 }

@@ -14,3 +14,4 @@ venv/
 *.db
 *.sqlite3
 
+backend/app/services/*.txt

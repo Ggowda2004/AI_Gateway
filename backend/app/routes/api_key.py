@@ -11,7 +11,7 @@ from typing import List
 
 router2 = APIRouter(
     prefix="/key",
-    tags=["Authentication"]
+    tags=["key-Authentication"]
 )
 
 @router2.post("/",response_model=APIKeyCreationResponse, summary="Create a new API key", status_code=status.HTTP_201_CREATED
