@@ -10,18 +10,24 @@ from core.security import verify_password
 
 def generate_api_key()->str:
     raw_key = secrets.token_hex(32)
-    key = f"kmgg_live_{raw_key}"
+    key_id = secrets.token_hex(4)
+    key = f"kmgg_live_{key_id}_{raw_key}"
 
     return key
 
 async def store_api_key(api_key_data:MakeAPIKey, db:AsyncSession, user_id:str)->dict:
     name = api_key_data.name
     raw_key = generate_api_key()
+    
+    parts = raw_key.split("_")
+    key_id = parts[2]
+
     hashed_key = hash_api_key(raw_key)
 
     new_key = APIKey(
         user_id=user_id,
         name=name,
+        key_id=key_id,
         key_hash = hashed_key
     )
 
@@ -31,7 +37,9 @@ async def store_api_key(api_key_data:MakeAPIKey, db:AsyncSession, user_id:str)->
 
     except Exception as e:
         await db.rollback()
-        raise AuthError("unable to store api key") from e
+        # raise AuthError("unable to store api key") from e
+        print("DATABASE ERROR TRACE:", str(e)) 
+        raise AuthError(f"unable to store api key: {str(e)}") from e
     await db.refresh(new_key)
     
     return {
@@ -61,38 +69,80 @@ async def revoke_api_key(db:AsyncSession, key_id:str, user_id:str)->str:
     await db.refresh(key_record)
     return f"user_id{user_id} key revoked successfully"
 
-async def validate_api_key(db:AsyncSession, key:str) -> User:
+# async def validate_api_key(db:AsyncSession, key:str) -> User:
+#     """
+#     Validates an API key by verifying it against stored hashes in the database.
+#     Returns the User associated with the valid key.
+#     """
+#     if not key.startswith("kmgg_live_"):
+#         raise AuthError("Invalid Key or No key match found")
+    
+#     try:
+#         # Query all active keys with user relationship eagerly loaded
+#         from sqlalchemy.orm import selectinload
+#         result = await db.execute(
+#             select(APIKey)
+#             .where(APIKey.is_active == True)
+#             .options(selectinload(APIKey.user))
+#         )
+#         active_keys = result.scalars().unique().all()
+        
+#         # Verify the incoming key against each stored hash
+#         for key_record in active_keys:
+#             try:
+#                 if verify_password(key, key_record.key_hash):
+#                     # Ensure user is loaded
+#                     user = key_record.user
+#                     if not user:
+#                         continue
+#                     return user
+#             except Exception:
+#                 # Skip if verification fails for this key
+#                 continue
+        
+#         raise AuthError("Invalid Key or No key match found")
+        
+#     except AuthError:
+#         raise
+#     except Exception as e:
+#         raise AuthError(f"Error validating API key: {str(e)}")
+
+from sqlalchemy.orm import selectinload
+from sqlalchemy import select
+
+async def validate_api_key(db: AsyncSession, key: str) -> User:
     """
-    Validates an API key by verifying it against stored hashes in the database.
-    Returns the User associated with the valid key.
+    Validates an API key by fetching the exact record via prefix.
+    Prevents looping bottlenecks and secures against timing attacks.
     """
     if not key.startswith("kmgg_live_"):
         raise AuthError("Invalid Key or No key match found")
     
     try:
-        # Query all active keys with user relationship eagerly loaded
-        from sqlalchemy.orm import selectinload
+        # 1. Extract the unique key identifier from the format: kmgg_live_ID_SECRET
+        parts = key.split("_")
+        if len(parts) < 4:  # Adjust index if your prefix structure differs
+            raise AuthError("Invalid Key format")
+            
+        key_id = parts[2]  # This is your database lookup index/prefix
+
+        # 2. Query exactly ONE row instead of loading the whole table
         result = await db.execute(
             select(APIKey)
-            .where(APIKey.is_active == True)
+            .where(APIKey.key_id == key_id, APIKey.is_active == True)
             .options(selectinload(APIKey.user))
         )
-        active_keys = result.scalars().unique().all()
+        key_record = result.scalars().first()
         
-        # Verify the incoming key against each stored hash
-        for key_record in active_keys:
-            try:
-                if verify_password(key, key_record.key_hash):
-                    # Ensure user is loaded
-                    user = key_record.user
-                    if not user:
-                        continue
-                    return user
-            except Exception:
-                # Skip if verification fails for this key
-                continue
-        
-        raise AuthError("Invalid Key or No key match found")
+        # 3. Fail-fast if the identifier doesn't exist
+        if not key_record or not key_record.user:
+            raise AuthError("Invalid Key or No key match found")
+            
+        # 4. Perform a single hash verification
+        if not verify_password(key, key_record.key_hash):
+            raise AuthError("Invalid Key or No key match found")
+            
+        return key_record.user
         
     except AuthError:
         raise

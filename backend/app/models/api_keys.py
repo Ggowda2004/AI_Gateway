@@ -31,6 +31,13 @@ class APIKey(Base):
         nullable=False
     )
 
+    key_id:Mapped[str]= mapped_column(
+        String(16),
+        nullable=False,
+        index=True,
+        unique=True
+    ) 
+
     name:Mapped[str] = mapped_column(
         String(128),
     )
