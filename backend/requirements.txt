@@ -7,3 +7,4 @@ pwdlib[argon2]
 PyJwt
 pydantic[email]
 python-multipart #for form data
+httpx

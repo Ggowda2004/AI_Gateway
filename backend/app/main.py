@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from routes.auth_r import router1
 from routes.api_key import router2
 from routes.chat import router3
+from routes.gateway import router4
 from db.base_models import Base
 
 
@@ -10,6 +11,7 @@ app = FastAPI()
 app.include_router(router1)
 app.include_router(router2)
 app.include_router(router3)
+app.include_router(router4)
 
 
 @app.get("/")

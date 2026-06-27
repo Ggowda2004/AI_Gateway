@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRY_MINUTES:int = 60
     SECRET_KEY:str
     ALGORITHM:str
+    GEMINI_API_KEY:str
 
     model_config = SettingsConfigDict(env_file=env_file_path,env_file_encoding = "utf-8", extra = "ignore")
 settings = Settings()

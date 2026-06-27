@@ -20,3 +20,28 @@
   "user_context": "Authenticated via user account: test1@test.com"
 }
 #all working
+
+{
+  "msg": "Is python a high level or low level language ?"
+}
+
+ -d '{
+  "model": "gemini-2.5-flash",
+  "temperature": 0.7,
+  "messages": [
+    {
+      "role": "user",
+      "content": "Is Python a high-level or low-level language?"
+    }
+  ]
+}
+'
+
+{
+  "content": "Python is a **high-level language**.\n\nHere's why:\n\n1.  **Abstraction from Hardware:** High-level languages abstract away the complex details of computer hardware (like memory management, CPU registers, and machine code). As a Python developer, you don't need to worry about these low-level operations.\n2.  **Human-Readable Syntax:** Python's syntax is designed to be clear, concise, and close to natural human language (English). This makes it much easier to read, write, and understand compared to low-level languages.\n    *   *Example:* `print(\"Hello, World!\")` is very intuitive.\n3.  **Automatic Memory Management:** Python handles memory allocation and deallocation automatically through a process called garbage collection. You don't have to manually manage memory like you would in C or C++.\n4.  **Focus on Problem Solving:** Because Python handles many underlying complexities, developers can focus more on solving the actual problem they're trying to address, rather than getting bogged down in machine-specific details.\n5.  **Portability:** Python code can generally run on different operating systems (Windows, macOS, Linux) without significant modification, as long as a Python interpreter is installed. Low-level languages often require recompilation or significant changes for different platforms.\n6.  **Rich Standard Library and Frameworks:** Python comes with a vast collection of pre-built modules and libraries that simplify common programming tasks, further enhancing its \"high-level\" nature by providing ready-to-use solutions.\n\n**In contrast, low-level languages** (like Assembly language or machine code) interact directly with the computer's hardware, require manual memory management, and are much harder for humans to read and write. While powerful for specific tasks like operating system development or embedded systems, they are much less productive for general-purpose application development.",
+  "model": "gemini-2.5-flash",
+  "usage": {
+    "prompt_tokens": 13,
+    "completion_tokens": 390
+  }
+}
