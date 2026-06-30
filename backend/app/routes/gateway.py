@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status, Security
+from fastapi import APIRouter, Depends, status, Security, Request
 from db.session import AsyncSession, get_db
 from schemas.provider import GatewayRequest, GatewayResponse
 from provider.gemini import GeminiProvider
@@ -6,6 +6,10 @@ from dependencies.api_key_dependency import get_user_from_api_key
 from services.api_key_services import validate_api_key
 from core.exceptions import AuthError
 from core.config import settings
+from core.logging import logger
+import time
+from models.users import User
+
 
 router4 = APIRouter(
     prefix="/v1",
@@ -15,33 +19,70 @@ router4 = APIRouter(
 GEMINI_API_KEY = settings.GEMINI_API_KEY
 
 @router4.post("/chat/completions", response_model=GatewayResponse)
-async def route_ai_request(request: GatewayRequest,
-    api_key_header: str = Security(get_user_from_api_key),
+async def route_ai_request(request: GatewayRequest,req_context: Request,
+    current_user: User = Security(get_user_from_api_key),
     db: AsyncSession = Depends(get_db)):
-    if not api_key_header:
-        raise AuthError("API Key header is missing")
-    """
-    Unified Gateway Entrypoint.
-    1. Authenticates the client token via your secure prefix-lookup system.
-    2. Dynamically routes the payload to the correct upstream AI vendor.
-    """
-    # 1. Authenticate the incoming request using your optimized code
-    # user = await validate_api_key(db, api_key_header)
-    # if not user:
-    #     raise AuthError("Unauthorized gateway access") -> already handled in api_key dependency
 
-    # 2. Dynamic Router / Factory Pattern
-    # Check what model the user wants. If it starts with 'gemini', use Gemini.
+    # api_key_header = req_context.state.api_key_str
     if request.model.startswith("gemini"):
-        provider = GeminiProvider(api_key=GEMINI_API_KEY)
-    
-    # This architecture makes adding OpenAI later as simple as adding an elif:
-    # elif request.model.startswith("gpt"):
-    #     provider = OpenAIProvider(api_key=OPENAI_API_KEY)
-    
+        provider_name = "gemini"
+        provider = GeminiProvider(api_key=GEMINI_API_KEY) 
     else:
+        logger.error(f"Routing Failed | Model '{request.model}' is unsupported.")
+
         raise AuthError(f"Unsupported model provider: {request.model}")
 
     # 3. Execute the payload through our unified interface contract
-    response = await provider.generate(request)
-    return response
+
+    start_time = time.perf_counter()
+    try:
+        response = await provider.generate(request)
+        latency_ms = int((time.perf_counter() - start_time) * 1000)
+
+        api_key_record = req_context.state.api_key_record
+
+        prompt_tokens = response.usage.get('prompt_tokens', 0)
+        completion_tokens = response.usage.get('completion_tokens', 0)
+        total_tokens = prompt_tokens + completion_tokens
+
+        estimated_cost = (prompt_tokens * 0.000000075) + (completion_tokens * 0.0000003)
+
+        from models.audit_logs import AuditLogs
+        db_log = AuditLogs(
+            user_id=current_user.id,
+            api_key_id=api_key_record.id,
+            provider=provider_name,
+            model=response.model,
+            latency=latency_ms,  # Stored as integer ms
+            prompt_tokens=prompt_tokens,
+            total_tokens=total_tokens,
+            estimated_cost=round(estimated_cost, 7),
+            status="success"
+        )
+
+        db.add(db_log)
+        await db.commit()  # Push permanently to PostgreSQL
+
+        await logger.info(f"Log written to DB for API Key ID: {current_user.id}")
+        return response
+    except Exception as e:
+        latency_ms = int((time.perf_counter() - start_time) * 1000)
+        # Log crashes or vendor errors cleanly so you can audit them in logs/gateway.log
+
+        from models.audit_logs import AuditLogs
+        api_key_record = getattr(req_context.state, 'api_key_record', None)
+        db_fail_log = AuditLogs(
+            user_id=current_user.id if 'api_key_record' in locals() else None,
+            api_key_id=api_key_record.id if 'api_key_record' in locals() else None,
+            provider="gemini" if request.model.startswith("gemini") else "unknown",
+            model=request.model,
+            latency=latency_ms,
+            prompt_tokens=0,
+            total_tokens=0,
+            estimated_cost=0.0,
+            status="failed"
+        )
+        db.add(db_fail_log)
+        await db.commit()
+        await logger.error(f"Upstream Failure | Model: {request.model} | Latency: {latency_ms:.2f}s | Error: {str(e)}")
+        raise

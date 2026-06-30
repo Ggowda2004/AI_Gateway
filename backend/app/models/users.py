@@ -9,6 +9,7 @@ from datetime import datetime, timezone
 from typing import TYPE_CHECKING, List
 if TYPE_CHECKING:
     from app.models.api_keys import APIKey
+    from app.models.audit_logs import AuditLogs
 
 
 class User(Base):
@@ -41,5 +42,9 @@ class User(Base):
 
     api_keys:Mapped[List["APIKey"]] = relationship(
         back_populates="user",
-        cascade="all, delete-orphan"
     )
+
+    audit_logs:Mapped[List["AuditLogs"]] = relationship(
+        back_populates="user",
+    )
+

@@ -6,9 +6,10 @@ from sqlalchemy import ForeignKey, String, DateTime, Boolean
 from datetime import datetime, timezone
 
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 if TYPE_CHECKING:
     from app.models.users import User
+    from app.models.audit_logs import AuditLogs
 
 class APIKey(Base):
 
@@ -55,4 +56,8 @@ class APIKey(Base):
 
     user:Mapped["User"] = relationship(
         back_populates="api_keys"
+    )
+
+    audit_logs:Mapped[List["AuditLogs"]] = relationship(
+        back_populates="api_key",
     )

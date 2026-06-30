@@ -49,7 +49,8 @@ class GeminiProvider(BaseAPIProvider):
                 usage_metadata = data.get("usageMetadata", {})
                 usage = {
                     "prompt_tokens": usage_metadata.get("promptTokenCount", 0),
-                    "completion_tokens": usage_metadata.get("candidatesTokenCount", 0)
+                    "completion_tokens": usage_metadata.get("candidatesTokenCount", 0),
+                    "total_tokens": usage_metadata.get("totalTokenCount", 0)#added default values to avoid KeyError if keys are missing
                 }
                 return GatewayResponse(
                     content=ai_text,

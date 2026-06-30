@@ -142,7 +142,7 @@ async def validate_api_key(db: AsyncSession, key: str) -> User:
         if not verify_password(key, key_record.key_hash):
             raise AuthError("Invalid Key or No key match found")
             
-        return key_record.user
+        return key_record.user, key_record
         
     except AuthError:
         raise

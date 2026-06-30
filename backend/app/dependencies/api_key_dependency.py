@@ -1,4 +1,4 @@
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, status, Request
 from db.session import AsyncSession, get_db
 from models.api_keys import APIKey
 from fastapi.security import APIKeyHeader
@@ -9,14 +9,16 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 api_key_header_scheme = APIKeyHeader(name="X-API-Key", auto_error=False)
 
-async def get_user_from_api_key(api_key: str = Depends(api_key_header_scheme), db: AsyncSession = Depends(get_db))->User:
+async def get_user_from_api_key(request: Request, api_key: str = Depends(api_key_header_scheme), db: AsyncSession = Depends(get_db))->User:
     if not api_key:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="API Key missing. Pass your key via 'X-API-Key' header"
         )
     try:
-        user = await validate_api_key(db, api_key)
+        user, key_record = await validate_api_key(db, api_key)
+        request.state.api_key_record = key_record
+        request.state.authenticated_user = user
         return user
     except AuthError as e:
         raise HTTPException(

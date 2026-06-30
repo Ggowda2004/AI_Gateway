@@ -1,0 +1,50 @@
+2026-06-27 21:59:07 | INFO     | INBOUND  | {"url": "/", "method": "GET", "client_ip": "127.0.0.1"}
+2026-06-27 21:59:07 | INFO     | OUTBOUND | URL: / | Status Code: 200
+2026-06-27 21:59:11 | INFO     | INBOUND  | {"url": "/docs", "method": "GET", "client_ip": "127.0.0.1"}
+2026-06-27 21:59:11 | INFO     | OUTBOUND | URL: /docs | Status Code: 200
+2026-06-27 21:59:11 | INFO     | INBOUND  | {"url": "/openapi.json", "method": "GET", "client_ip": "127.0.0.1"}
+2026-06-27 21:59:11 | INFO     | OUTBOUND | URL: /openapi.json | Status Code: 200
+2026-06-27 22:01:14 | INFO     | INBOUND  | {"url": "/v1/chat/completions", "method": "POST", "client_ip": "127.0.0.1"}
+2026-06-27 22:01:57 | INFO     | INBOUND  | {"url": "/v1/chat/completions", "method": "POST", "client_ip": "127.0.0.1"}
+2026-06-27 22:02:23 | INFO     | INBOUND  | {"url": "/v1/chat/completions", "method": "POST", "client_ip": "127.0.0.1"}
+2026-06-27 22:02:54 | INFO     | INBOUND  | {"url": "/v1/chat/completions", "method": "POST", "client_ip": "127.0.0.1"}
+2026-06-27 22:03:32 | INFO     | INBOUND  | {"url": "/v1/chat/completions", "method": "POST", "client_ip": "127.0.0.1"}
+2026-06-27 22:03:40 | INFO     | OUTBOUND | URL: /v1/chat/completions | Status Code: 200
+2026-06-28 10:26:22 | INFO     | INBOUND  | {"url": "/", "method": "GET", "client_ip": "127.0.0.1"}
+2026-06-28 10:26:22 | INFO     | OUTBOUND | URL: / | Status Code: 200
+2026-06-28 10:26:23 | INFO     | INBOUND  | {"url": "/favicon.ico", "method": "GET", "client_ip": "127.0.0.1"}
+2026-06-28 10:26:23 | INFO     | OUTBOUND | URL: /favicon.ico | Status Code: 404
+2026-06-28 10:26:25 | INFO     | INBOUND  | {"url": "/docs", "method": "GET", "client_ip": "127.0.0.1"}
+2026-06-28 10:26:25 | INFO     | OUTBOUND | URL: /docs | Status Code: 200
+2026-06-28 10:26:26 | INFO     | INBOUND  | {"url": "/openapi.json", "method": "GET", "client_ip": "127.0.0.1"}
+2026-06-28 10:26:26 | INFO     | OUTBOUND | URL: /openapi.json | Status Code: 200
+2026-06-28 10:28:00 | INFO     | INBOUND  | {"url": "/v1/chat/completions", "method": "POST", "client_ip": "127.0.0.1"}
+2026-06-28 10:28:03 | INFO     | OUTBOUND | URL: /v1/chat/completions | Status Code: 200
+2026-06-28 10:37:09 | INFO     | INBOUND  | {"url": "/v1/chat/completions", "method": "POST", "client_ip": "127.0.0.1"}
+2026-06-28 10:37:12 | INFO     | Success Response | Model: gemini-2.5-flash | Latency: 2.10s | Prompt Tokens: 14 | Completion Tokens: 3
+2026-06-28 10:37:12 | INFO     | OUTBOUND | URL: /v1/chat/completions | Status Code: 200
+2026-06-30 09:55:26 | INFO     | INBOUND  | {"url": "/", "method": "GET", "client_ip": "127.0.0.1"}
+2026-06-30 09:55:26 | INFO     | OUTBOUND | URL: / | Status Code: 200
+2026-06-30 09:55:31 | INFO     | INBOUND  | {"url": "/docs", "method": "GET", "client_ip": "127.0.0.1"}
+2026-06-30 09:55:31 | INFO     | OUTBOUND | URL: /docs | Status Code: 200
+2026-06-30 09:55:31 | INFO     | INBOUND  | {"url": "/openapi.json", "method": "GET", "client_ip": "127.0.0.1"}
+2026-06-30 09:55:31 | INFO     | OUTBOUND | URL: /openapi.json | Status Code: 200
+2026-06-30 09:56:29 | INFO     | INBOUND  | {"url": "/v1/chat/completions", "method": "POST", "client_ip": "127.0.0.1"}
+2026-06-30 09:56:29 | INFO     | OUTBOUND | URL: /v1/chat/completions | Status Code: 401
+2026-06-30 10:03:24 | INFO     | INBOUND  | {"url": "/", "method": "GET", "client_ip": "127.0.0.1"}
+2026-06-30 10:03:24 | INFO     | OUTBOUND | URL: / | Status Code: 200
+2026-06-30 10:03:28 | INFO     | INBOUND  | {"url": "/docs", "method": "GET", "client_ip": "127.0.0.1"}
+2026-06-30 10:03:28 | INFO     | OUTBOUND | URL: /docs | Status Code: 200
+2026-06-30 10:03:28 | INFO     | INBOUND  | {"url": "/openapi.json", "method": "GET", "client_ip": "127.0.0.1"}
+2026-06-30 10:03:28 | INFO     | OUTBOUND | URL: /openapi.json | Status Code: 200
+2026-06-30 10:04:20 | INFO     | INBOUND  | {"url": "/v1/chat/completions", "method": "POST", "client_ip": "127.0.0.1"}
+2026-06-30 10:41:17 | INFO     | INBOUND  | {"url": "/v1/chat/completions", "method": "POST", "client_ip": "127.0.0.1"}
+2026-06-30 10:41:48 | INFO     | INBOUND  | {"url": "/v1/chat/completions", "method": "POST", "client_ip": "127.0.0.1"}
+2026-06-30 10:42:31 | INFO     | INBOUND  | {"url": "/v1/chat/completions", "method": "POST", "client_ip": "127.0.0.1"}
+2026-06-30 10:44:50 | INFO     | INBOUND  | {"url": "/v1/chat/completions", "method": "POST", "client_ip": "127.0.0.1"}
+2026-06-30 10:44:52 | ERROR    | Upstream Failure | Model: gemini-2.5-flash | Latency: 1794.00s | Error: cannot access local variable 'AuditLogs' where it is not associated with a value
+2026-06-30 10:45:41 | INFO     | INBOUND  | {"url": "/v1/chat/completions", "method": "POST", "client_ip": "127.0.0.1"}
+2026-06-30 10:45:43 | ERROR    | Upstream Failure | Model: gemini-2.5-flash | Latency: 1668.00s | Error: 'User' object has no attribute 'user_id'
+2026-06-30 10:46:36 | INFO     | INBOUND  | {"url": "/v1/chat/completions", "method": "POST", "client_ip": "127.0.0.1"}
+2026-06-30 10:46:38 | INFO     | Log written to DB for API Key ID: d13e34f1-ce70-442c-8882-30d5f78845a5
+2026-06-30 10:46:38 | INFO     | OUTBOUND | URL: /v1/chat/completions | Status Code: 200
