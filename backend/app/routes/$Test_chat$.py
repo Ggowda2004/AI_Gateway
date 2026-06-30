@@ -5,25 +5,6 @@ from models.api_keys import APIKey
 from models.users import User
 from schemas.chat_schema import ChatRequest, ChatResponse
 
-'''The below endpoint was a temp endpoint, to verify usage'''
-# router3 = APIRouter(
-#     prefix="/services",
-#     tags=["Third-Party Services"]
-#     )
-
-
-# @router3.get("/data-stream")
-# async def secure_data_stream(api_context: APIKey = Depends(get_current_api_key_context))->dict: # 👈 Guarded by API key!
-#     key_owner = api_context.user 
-    
-#     return {
-#         "status": "authenticated",
-#         "authenticated_via_key": api_context.name,
-#         "key_id": api_context.id,
-#         "owner_email": key_owner.email
-#     }
-
-
 router3 = APIRouter(
     prefix="/chat",
     tags=["AI Chat Assistant"]

@@ -1,20 +1,37 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Depends
 from routes.auth_r import router1
 from routes.api_key import router2
-from routes.chat import router3
+# from routes.chat import router3
 from routes.gateway import router4
 from db.base_models import Base
 from core.logging import logger
 import json
+from contextlib import asynccontextmanager
+from services.redis_service import redis_service, get_redis
+from core.config import settings
+from redis.asyncio import Redis
 
 
-app = FastAPI()
-app.include_router(router1)
-app.include_router(router2)
-app.include_router(router3)
-app.include_router(router4)
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    try:
+        await redis_service.initialize(settings.REDIS_URL)
+        await logger.info("Application infrastructure startup complete.")
+    except Exception as e:
+        await logger.critical(f"Application failed to start: {str(e)}")
+        raise e
+    yield  # The server stays running
+    
+    # (Ctrl+C) mean server stop and redis closed
+    await redis_service.close()
+    await logger.info("Application infrastructure shutdown complete.")
 
 
+
+app = FastAPI(
+    title="AI Gateway",
+    lifespan=lifespan#this registers the shutdown
+)
 
 
 @app.middleware("http")
@@ -35,9 +52,28 @@ async def log_middleware(request: Request, call_next):
     return response
 
 
+app.include_router(router1)
+app.include_router(router2)
+# app.include_router(router3)
+app.include_router(router4)
+
 @app.get("/")
-def home():
-    return{"message":"next i will redirect this(pending work)"}
+async def check_health(redis_client: Redis = Depends(get_redis)):
+    try:
+        # Actually verify your infrastructure is alive in real time
+        await redis_client.ping()
+        return {
+            "status": "healthy",
+            "services": {
+                "api": "online",
+                "redis": "connected"
+            }
+        }
+    except Exception as e:
+        return {
+            "status": "unhealthy",
+            "error": f"Infrastructure dependency failure: {str(e)}"
+        }
 
 @app.get("/healthz")
 def check_health():
