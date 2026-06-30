@@ -9,6 +9,10 @@ from core.config import settings
 from core.logging import logger
 import time
 from models.users import User
+from dependencies.rate_lomiter import rate_limiter
+from services.redis_service import get_redis
+from redis.asyncio import Redis
+from services.cache_service import generate_cache_key, get_cached_response, set_cached_response
 
 
 router4 = APIRouter(
@@ -17,11 +21,22 @@ router4 = APIRouter(
 )
 
 GEMINI_API_KEY = settings.GEMINI_API_KEY
-
-@router4.post("/chat/completions", response_model=GatewayResponse)
-async def route_ai_request(request: GatewayRequest,req_context: Request,
+#rate limiter dependency added
+@router4.post("/chat/completions", dependencies=[Depends(rate_limiter)], response_model=GatewayResponse)
+async def route_ai_request(
+    request: GatewayRequest,
+    req_context: Request,
     current_user: User = Security(get_user_from_api_key),
-    db: AsyncSession = Depends(get_db)):
+    db: AsyncSession = Depends(get_db),
+     redis_client: Redis = Depends(get_redis)#1
+    ):
+
+    cache_key = generate_cache_key(request)#2
+    cached_reply = await get_cached_response(redis_client, cache_key)#3
+    
+    if cached_reply:
+        await logger.info(f"⚡ Cache HIT | Model: {request.model}")
+        return cached_reply # Fast return,
 
     # api_key_header = req_context.state.api_key_str
     if request.model.startswith("gemini"):
@@ -38,6 +53,8 @@ async def route_ai_request(request: GatewayRequest,req_context: Request,
     try:
         response = await provider.generate(request)
         latency_ms = int((time.perf_counter() - start_time) * 1000)
+        response_dict = response.model_dump() #4
+        await set_cached_response(redis_client, cache_key, response_dict, ttl_seconds=3600)#5
 
         api_key_record = req_context.state.api_key_record
 

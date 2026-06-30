@@ -15,3 +15,14 @@ venv/
 *.sqlite3
 
 backend/app/services/*.txt
+
+# to ignore all log files explicitly
+*.log
+
+# to ignore specific log directories if your app uses them
+logs/
+log/
+
+# Ignore system-specific or daemon logs
+*.syslog
+*.out
