@@ -8,3 +8,6 @@ PyJwt
 pydantic[email]
 python-multipart #for form data
 httpx
+openai
+groq
+
