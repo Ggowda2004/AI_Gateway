@@ -34,19 +34,58 @@ app = FastAPI(
 )
 
 
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+# @app.middleware("http")
+# async def log_middleware(request: Request, call_next):
+#     """Asynchronously logs every incoming HTTP request lifecycle."""
+#     log_dict = {
+#         "url": request.url.path,
+#         "method": request.method,
+#         "client_ip": request.client.host if request.client else "unknown"
+#     }
+#     #Non-blocking log for incoming request tracking
+#     await logger.info(f"INBOUND  | {json.dumps(log_dict)}") #dict to json for clean output
+
+#     response = await call_next(request)
+
+#     await logger.info(f"OUTBOUND | URL: {request.url.path} | Status Code: {response.status_code}")
+    
+#     return response
+
+# To prevent your logging middleware from buffering or blocking your real-time text event streams, you must explicitly check the URL path. If a user is hitting your streaming gateway route (/v1/chat/completions), let it pass through immediately without messing with the response object wrapper.
+
+
 @app.middleware("http")
 async def log_middleware(request: Request, call_next):
-    """Asynchronously logs every incoming HTTP request lifecycle."""
+    """Asynchronously logs every incoming HTTP request lifecycle, skipping body parsing for streams."""
     log_dict = {
         "url": request.url.path,
         "method": request.method,
         "client_ip": request.client.host if request.client else "unknown"
     }
-    #Non-blocking log for incoming request tracking
-    await logger.info(f"INBOUND  | {json.dumps(log_dict)}") #dict to json for clean output
+    
+    # 1. Log the INBOUND connection normally
+    await logger.info(f"INBOUND  | {json.dumps(log_dict)}")
 
+    # 2. 🟢 FIXED: If it's your streaming gateway route, execute instantly and return!
+    if request.url.path == "/v1/chat/completions":
+        response = await call_next(request)
+        # Log outbound directly since we shouldn't attempt to intercept streaming payloads
+        await logger.info(f"OUTBOUND | URL: {request.url.path} | Status Code: {response.status_code} (STREAM)")
+        return response
+
+    # 3. Standard processing for regular JSON endpoints (like /healthz or auth routes)
     response = await call_next(request)
-
     await logger.info(f"OUTBOUND | URL: {request.url.path} | Status Code: {response.status_code}")
     
     return response

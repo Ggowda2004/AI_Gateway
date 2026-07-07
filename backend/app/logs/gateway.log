@@ -171,3 +171,80 @@
 2026-07-06 23:31:19 | INFO     | OUTBOUND | URL: /v1/chat/completions | Status Code: 200
 2026-07-06 23:32:31 | INFO     | Draining and terminating Redis connection pools...
 2026-07-06 23:32:31 | INFO     | Application infrastructure shutdown complete.
+2026-07-07 19:23:23 | INFO     | Initializing global asynchronous Redis connection pool...
+2026-07-07 19:26:24 | INFO     | Initializing global asynchronous Redis connection pool...
+2026-07-07 19:26:24 | INFO     | ✅ Redis client successfully pinged and healthy.
+2026-07-07 19:26:24 | INFO     | Application infrastructure startup complete.
+2026-07-07 21:24:35 | INFO     | INBOUND  | {"url": "/", "method": "GET", "client_ip": "127.0.0.1"}
+2026-07-07 21:24:35 | INFO     | OUTBOUND | URL: / | Status Code: 200
+2026-07-07 21:24:38 | INFO     | INBOUND  | {"url": "/docs", "method": "GET", "client_ip": "127.0.0.1"}
+2026-07-07 21:24:38 | INFO     | OUTBOUND | URL: /docs | Status Code: 200
+2026-07-07 21:24:38 | INFO     | INBOUND  | {"url": "/openapi.json", "method": "GET", "client_ip": "127.0.0.1"}
+2026-07-07 21:24:39 | INFO     | OUTBOUND | URL: /openapi.json | Status Code: 200
+2026-07-07 21:25:42 | INFO     | INBOUND  | {"url": "/v1/chat/completions", "method": "POST", "client_ip": "127.0.0.1"}
+2026-07-07 21:32:08 | INFO     | Draining and terminating Redis connection pools...
+2026-07-07 21:32:08 | INFO     | Application infrastructure shutdown complete.
+2026-07-07 21:32:12 | INFO     | Initializing global asynchronous Redis connection pool...
+2026-07-07 21:32:12 | INFO     | ✅ Redis client successfully pinged and healthy.
+2026-07-07 21:32:12 | INFO     | Application infrastructure startup complete.
+2026-07-07 21:32:14 | INFO     | INBOUND  | {"url": "/docs", "method": "GET", "client_ip": "127.0.0.1"}
+2026-07-07 21:32:14 | INFO     | OUTBOUND | URL: /docs | Status Code: 200
+2026-07-07 21:32:14 | INFO     | INBOUND  | {"url": "/openapi.json", "method": "GET", "client_ip": "127.0.0.1"}
+2026-07-07 21:32:14 | INFO     | OUTBOUND | URL: /openapi.json | Status Code: 200
+2026-07-07 21:33:16 | INFO     | INBOUND  | {"url": "/v1/chat/completions", "method": "POST", "client_ip": "127.0.0.1"}
+2026-07-07 21:36:13 | INFO     | Draining and terminating Redis connection pools...
+2026-07-07 21:36:13 | INFO     | Application infrastructure shutdown complete.
+2026-07-07 21:36:16 | INFO     | Initializing global asynchronous Redis connection pool...
+2026-07-07 21:36:16 | INFO     | ✅ Redis client successfully pinged and healthy.
+2026-07-07 21:36:16 | INFO     | Application infrastructure startup complete.
+2026-07-07 21:36:24 | INFO     | Draining and terminating Redis connection pools...
+2026-07-07 21:36:24 | INFO     | Application infrastructure shutdown complete.
+2026-07-07 21:36:26 | INFO     | Initializing global asynchronous Redis connection pool...
+2026-07-07 21:36:26 | INFO     | ✅ Redis client successfully pinged and healthy.
+2026-07-07 21:36:26 | INFO     | Application infrastructure startup complete.
+2026-07-07 21:36:29 | INFO     | INBOUND  | {"url": "/v1/chat/completions", "method": "POST", "client_ip": "127.0.0.1"}
+2026-07-07 21:36:30 | INFO     | OUTBOUND | URL: /v1/chat/completions | Status Code: 200 (STREAM)
+2026-07-07 21:36:34 | INFO     | Log written to DB for API Key ID: e6e7296f-5036-4b11-8541-a3f5ad1ad68e
+2026-07-07 21:37:10 | INFO     | INBOUND  | {"url": "/v1/chat/completions", "method": "POST", "client_ip": "127.0.0.1"}
+2026-07-07 21:37:10 | INFO     | OUTBOUND | URL: /v1/chat/completions | Status Code: 200 (STREAM)
+2026-07-07 21:37:13 | INFO     | Log written to DB for API Key ID: e6e7296f-5036-4b11-8541-a3f5ad1ad68e
+2026-07-07 21:41:08 | INFO     | Draining and terminating Redis connection pools...
+2026-07-07 21:41:08 | INFO     | Application infrastructure shutdown complete.
+2026-07-07 21:41:11 | INFO     | Initializing global asynchronous Redis connection pool...
+2026-07-07 21:41:11 | INFO     | ✅ Redis client successfully pinged and healthy.
+2026-07-07 21:41:11 | INFO     | Application infrastructure startup complete.
+2026-07-07 21:41:34 | INFO     | INBOUND  | {"url": "/v1/chat/completions", "method": "GET", "client_ip": "127.0.0.1"}
+2026-07-07 21:41:34 | INFO     | OUTBOUND | URL: /v1/chat/completions | Status Code: 405 (STREAM)
+2026-07-07 21:41:35 | INFO     | INBOUND  | {"url": "/v1/chat/completions", "method": "GET", "client_ip": "127.0.0.1"}
+2026-07-07 21:41:35 | INFO     | OUTBOUND | URL: /v1/chat/completions | Status Code: 405 (STREAM)
+2026-07-07 21:41:50 | INFO     | Draining and terminating Redis connection pools...
+2026-07-07 21:41:50 | INFO     | Application infrastructure shutdown complete.
+2026-07-07 21:41:52 | INFO     | Initializing global asynchronous Redis connection pool...
+2026-07-07 21:41:52 | INFO     | ✅ Redis client successfully pinged and healthy.
+2026-07-07 21:41:52 | INFO     | Application infrastructure startup complete.
+2026-07-07 21:43:11 | INFO     | INBOUND  | {"url": "/v1/chat/completions", "method": "POST", "client_ip": "127.0.0.1"}
+2026-07-07 21:43:11 | INFO     | OUTBOUND | URL: /v1/chat/completions | Status Code: 401 (STREAM)
+2026-07-07 21:44:26 | INFO     | INBOUND  | {"url": "/v1/chat/completions", "method": "POST", "client_ip": "127.0.0.1"}
+2026-07-07 21:44:26 | INFO     | OUTBOUND | URL: /v1/chat/completions | Status Code: 401 (STREAM)
+2026-07-07 21:44:49 | INFO     | INBOUND  | {"url": "/v1/chat/completions", "method": "POST", "client_ip": "127.0.0.1"}
+2026-07-07 21:44:50 | INFO     | OUTBOUND | URL: /v1/chat/completions | Status Code: 200 (STREAM)
+2026-07-07 21:44:58 | INFO     | Log written to DB for API Key ID: e6e7296f-5036-4b11-8541-a3f5ad1ad68e
+2026-07-07 21:46:55 | INFO     | INBOUND  | {"url": "/v1/chat/completions", "method": "POST", "client_ip": "127.0.0.1"}
+2026-07-07 21:46:55 | INFO     | ⚡ Cache HIT | Model: gemini-2.5-flash
+2026-07-07 21:46:55 | INFO     | OUTBOUND | URL: /v1/chat/completions | Status Code: 200 (STREAM)
+2026-07-07 21:48:02 | INFO     | INBOUND  | {"url": "/v1/chat/completions", "method": "POST", "client_ip": "127.0.0.1"}
+2026-07-07 21:48:03 | INFO     | OUTBOUND | URL: /v1/chat/completions | Status Code: 200 (STREAM)
+2026-07-07 21:48:09 | INFO     | Log written to DB for API Key ID: e6e7296f-5036-4b11-8541-a3f5ad1ad68e
+2026-07-07 21:51:00 | INFO     | INBOUND  | {"url": "/v1/chat/completions", "method": "POST", "client_ip": "127.0.0.1"}
+2026-07-07 21:51:00 | INFO     | OUTBOUND | URL: /v1/chat/completions | Status Code: 200 (STREAM)
+2026-07-07 21:51:01 | INFO     | Log written to DB for API Key ID: e6e7296f-5036-4b11-8541-a3f5ad1ad68e
+2026-07-07 23:39:47 | INFO     | Draining and terminating Redis connection pools...
+2026-07-07 23:39:47 | INFO     | Application infrastructure shutdown complete.
+2026-07-07 23:42:07 | INFO     | Initializing global asynchronous Redis connection pool...
+2026-07-07 23:42:07 | INFO     | ✅ Redis client successfully pinged and healthy.
+2026-07-07 23:42:07 | INFO     | Application infrastructure startup complete.
+2026-07-07 23:42:46 | INFO     | INBOUND  | {"url": "/v1/chat/completions", "method": "POST", "client_ip": "127.0.0.1"}
+2026-07-07 23:42:47 | INFO     | OUTBOUND | URL: /v1/chat/completions | Status Code: 200 (STREAM)
+2026-07-07 23:42:47 | INFO     | Log written to DB for API Key ID: e6e7296f-5036-4b11-8541-a3f5ad1ad68e
+2026-07-07 23:42:53 | INFO     | Draining and terminating Redis connection pools...
+2026-07-07 23:42:53 | INFO     | Application infrastructure shutdown complete.

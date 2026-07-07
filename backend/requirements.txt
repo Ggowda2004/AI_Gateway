@@ -10,4 +10,5 @@ python-multipart #for form data
 httpx
 openai
 groq
-
+google
+google-genai
