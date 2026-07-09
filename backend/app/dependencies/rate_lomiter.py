@@ -16,7 +16,7 @@ async def rate_limiter(request: Request, redis_client: Redis = Depends(get_redis
     redis_key = f"ratelimit:{api_key_record.id}:{current_minute}"
 
     try:
-        # 3. Use an atomic pipeline to increment the count and set expiration
+        #Use an atomic pipeline to increment the count and set expiration
         async with redis_client.pipeline(transaction=True) as pipe:
             pipe.incr(redis_key)
             pipe.expire(redis_key, 60)  # Key expires in 60s, cleaning up Redis automatically
@@ -24,7 +24,7 @@ async def rate_limiter(request: Request, redis_client: Redis = Depends(get_redis
         
         current_requests = results[0]  # The result of the INCR operation
 
-        # 4. Check if the user went over the limit
+        #Check if the user went over the limit
         if current_requests > LIMIT_PER_MINUTE:
             raise HTTPException(
                 status_code=status.HTTP_429_TOO_MANY_REQUESTS,

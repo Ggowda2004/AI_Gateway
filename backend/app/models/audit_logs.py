@@ -4,9 +4,6 @@ import uuid
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy import ForeignKey, String, Integer, Float, DateTime
 from datetime import datetime, timezone
-# from models.users import User
-# from models.api_keys import APIKey
-
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:

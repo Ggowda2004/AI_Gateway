@@ -4,7 +4,7 @@ from core.config import settings
 from datetime import datetime, timezone, timedelta
 from core.exceptions import AuthError
 
-# Initialize the global hashing engine
+#Initialize the global hashing engine
 password_hash = PasswordHash.recommended()
 
 def hash_password(password:str)->str:

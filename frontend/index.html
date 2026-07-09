@@ -1,83 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>AI Gateway Client</title>
-    <style>
-        body { font-family: Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; }
-        #chatbox { min-height: 150px; border: 1px solid #ccc; padding: 15px; margin-bottom: 10px; background: #f9f9f9; border-radius: 6px; white-space: pre-wrap; }
-        input, button { padding: 10px; font-size: 16px; }
-        input { width: 75%; }
-        button { width: 20%; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
-    </style>
-</head>
-<body>
-
-    <h2>⚡ AI Gateway Live Streaming</h2>
-    <div id="chatbox">AI response will stream here word-by-word...</div>
-    
-    <input type="text" id="promptInput" value="Explain quantum computing in one simple sentence.">
-    <button onclick="sendPrompt()">Send</button>
-
-    <script>
-        async function sendPrompt() {
-    const chatbox = document.getElementById('chatbox');
-    const prompt = document.getElementById('promptInput').value;
-    chatbox.innerText = ""; // Clear the window buffer
-
-    try {
-        const response = await fetch('http://127.0.0.1:8000/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-API-Key': 'kmgg_live_83485463_b0b85755f4b346ee52d3e688421a2c847b1565866fe130cbd06b7f2493391a43' // put ur api key for testing 
-            },
-            body: JSON.stringify({
-                model: "llama-3.3-70b-versatile",
-                messages: [{ role: 'user', content: prompt }]
-            })
-        });
-
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder('utf-8');
-        let buffer = ""; // Keeps track of partial incoming network strings
-
-        while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-
-            // Append raw chunk data to our string buffer
-            buffer += decoder.decode(value, { stream: true });
-
-            // Split the buffer by double newlines (standard Server-Sent Event boundary)
-            const lines = buffer.split("\n\n");
-            
-            // Leave the last incomplete line fragment inside the buffer pool
-            buffer = lines.pop();
-
-            for (const line of lines) {
-                if (line.startsWith("data: ")) {
-                    const jsonStr = line.replace("data: ", "").trim();
-                    try {
-                        const jsonPayload = JSON.parse(jsonStr);
-                        if (jsonPayload.content) {
-                            // 🟢 Append your token directly to the browser UI screen!
-                            chatbox.innerText += jsonPayload.content;
-                        } else if (jsonPayload.error) {
-                            chatbox.innerText += `\n[Error]: ${jsonPayload.error}`;
-                        }
-                    } catch (e) {
-                        // Skip any partial parsing fragments
-                        continue;
-                    }
-                }
-            }
-        }
-    } catch (error) {
-        chatbox.innerText = "Error connecting to gateway: " + error.message;
-    }
-}
-
-    </script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Gateway Frontend</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>

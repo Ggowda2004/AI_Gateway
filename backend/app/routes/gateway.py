@@ -24,8 +24,7 @@ router4 = APIRouter(
 GEMINI_API_KEY = settings.GEMINI_API_KEY
 GROQ_API_KEY = settings.GROQ_API_KEY 
 
-
-# Note: Remove response_model=GatewayResponse because streaming returns a raw event-stream text, not a flat JSON object.
+# Note:removed response_model=GatewayResponse because streaming returns a raw event-stream text, not a flat JSON object.
 
 @router4.post("/chat/completions", dependencies=[Depends(rate_limiter)])#response_model=GatewayResponse)
 async def route_ai_request(
@@ -35,7 +34,7 @@ async def route_ai_request(
     db: AsyncSession = Depends(get_db),
     redis_client: Redis = Depends(get_redis)
 ):
-    # 1. Check Cache Layer First
+    #Checking Cache Layer First
     cache_key = generate_cache_key(request)
     cached_reply = await get_cached_response(redis_client, cache_key)
     
@@ -43,7 +42,6 @@ async def route_ai_request(
         await logger.info(f"⚡ Cache HIT | Model: {request.model}")
         return cached_reply
 
-    # 2. Dynamic Router Core Setup
     if request.model.startswith("gemini"):
         provider_name = "gemini"
         provider = GeminiProvider(api_key=GEMINI_API_KEY)
@@ -53,77 +51,9 @@ async def route_ai_request(
     else:
         await logger.error(f"Routing Failed | Model '{request.model}' is unsupported.")
         raise AuthError(f"Unsupported model provider: {request.model}")
-
-    #111
-    # start_time = time.perf_counter()
-    # status_label = "success"
     
-    # try:
-    #     # 3. Execute Primary Vendor Request
-    #     response = await provider.generate(request)
-    #     latency_ms = int((time.perf_counter() - start_time) * 1000)
-        
-    # except Exception as primary_error:
-    #     # ⚠️ 4. Failover Recovery Flow (If Gemini crashes, immediately swap to Groq)
-    #     if provider_name == "gemini" and GROQ_API_KEY:
-    #         await logger.error(
-    #             f"❌ Primary Provider 'gemini' Failed! Error: {str(primary_error)}. "
-    #             f"Initiating fallback failover mechanism to Groq..."
-    #         )
-    #         try:
-    #             provider_name = "groq_fallback"
-    #             status_label = "fallback_success"
-    #             provider = GroqProvider(api_key=GROQ_API_KEY)
-                
-    #             response = await provider.generate(request)
-    #             latency_ms = int((time.perf_counter() - start_time) * 1000)
-    #             await logger.info("✨ Fallback recovery successful via Groq!")
-    #         except Exception as fallback_error:
-    #             latency_ms = int((time.perf_counter() - start_time) * 1000)
-    #             await logger.error(f"🚨 Double Vendor Crash! Backup provider also failed: {str(fallback_error)}")
-    #             await handle_failed_log(db, req_context, current_user, request, latency_ms, "failed")
-    #             raise fallback_error
-    #     else:
-    #         latency_ms = int((time.perf_counter() - start_time) * 1000)
-    #         await handle_failed_log(db, req_context, current_user, request, latency_ms, "failed")
-    #         raise primary_error
 
-    # # 5. Populate Cache Footprint
-    # response_dict = response.model_dump()
-    # await set_cached_response(redis_client, cache_key, response_dict, ttl_seconds=3600)
-
-    # # 6. Extract Consumption Metrics
-    # api_key_record = req_context.state.api_key_record
-    # prompt_tokens = response.usage.get('prompt_tokens', 0)
-    # completion_tokens = response.usage.get('completion_tokens', 0)
-    # total_tokens = prompt_tokens + completion_tokens
-
-    # # Dynamic Pricing Calculations (Groq Llama 3 models are significantly cheaper)
-    # if "groq" in provider_name:
-    #     estimated_cost = (prompt_tokens * 0.00000005) + (completion_tokens * 0.00000008)  # Llama 3.1 8B rates
-    # else:
-    #     estimated_cost = (prompt_tokens * 0.000000075) + (completion_tokens * 0.00000003) # Gemini 2.5 Flash rates
-
-    # # 7. Write Successful Audit Log Row to PostgreSQL
-    # from models.audit_logs import AuditLogs
-    # db_log = AuditLogs(
-    #     user_id=current_user.id,
-    #     api_key_id=api_key_record.id,
-    #     provider=provider_name,
-    #     model=response.model,
-    #     latency=latency_ms,
-    #     prompt_tokens=prompt_tokens,
-    #     total_tokens=total_tokens,
-    #     estimated_cost=round(estimated_cost, 7),
-    #     status=status_label
-    # )
-    # db.add(db_log)
-    # await db.commit()
-    
-    # await logger.info(f"Log written to DB for API Key ID: {api_key_record.id}")
-    # return response
-
-    # 3. 🟢 Asynchronous Generator function with COMPLETE FALLBACK
+    #Asynchronous Generator function with COMPLETE FALLBACK
     async def response_streamer():
         nonlocal provider_name, provider  # Allows us to swap them dynamically inside the generator
         full_response_text = ""
@@ -166,7 +96,7 @@ async def route_ai_request(
                 yield f"data: {json.dumps({'error': 'Streaming interrupted'})}\n\n"
                 return
 
-        # 4. Post-Stream Operations (Only runs if a stream succeeded)
+        #(Only runs if a stream succeeded)
         latency_ms = int((time.perf_counter() - start_time) * 1000)
         api_key_record = req_context.state.api_key_record
         approx_tokens = len(full_response_text) // 4

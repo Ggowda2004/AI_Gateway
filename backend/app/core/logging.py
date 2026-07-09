@@ -17,7 +17,7 @@ def setup_sync_logger():
     sync_logger = logging.getLogger("ai_gateway_sync")
     sync_logger.setLevel(logging.INFO)
 
-    if sync_logger.handlers:
+    if sync_logger.handlers:#prevent adding multiple handlers if the logger is already configured
         return sync_logger
     
     formatter = logging.Formatter(
@@ -36,23 +36,24 @@ def setup_sync_logger():
     file_handler.setFormatter(formatter)
     sync_logger.addHandler(file_handler)
 
+
     return sync_logger
 
 sync_logger = setup_sync_logger()
 
-# The Async Wrapper Class
+#Wrapper Class
 
 class AsyncLogger:
     """Non-blocking asynchronous wrapper over Python's standard logger."""
     async def info(self, msg: Any):
         await asyncio.to_thread(sync_logger.info, msg)
-        # Offloads the blocking file-write call to a background thread pool
-
     async def warning(self, msg: Any):
         await asyncio.to_thread(sync_logger.warning, msg)
-
     async def error(self, msg: Any):
         await asyncio.to_thread(sync_logger.error, msg)
-
-# Single async instance exported across the app
 logger = AsyncLogger()
+
+
+'''This code implements a non-blocking asynchronous wrapper around Python's standard logging library.
+It uses asyncio.to_thread() to offload blocking file/console I/O operations to background threads, keeping the main event loop responsive.
+The main asyncio event loop remains completely free to process other concurrent network requests or tasks without waiting for disk I/O operations to finish.'''

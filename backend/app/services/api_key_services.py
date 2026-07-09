@@ -37,7 +37,6 @@ async def store_api_key(api_key_data:MakeAPIKey, db:AsyncSession, user_id:str)->
 
     except Exception as e:
         await db.rollback()
-        # raise AuthError("unable to store api key") from e
         print("DATABASE ERROR TRACE:", str(e)) 
         raise AuthError(f"unable to store api key: {str(e)}") from e
     await db.refresh(new_key)
@@ -49,7 +48,6 @@ async def store_api_key(api_key_data:MakeAPIKey, db:AsyncSession, user_id:str)->
     }
 
 async def revoke_api_key(db:AsyncSession, key_id:str, user_id:str)->str:
-    # key_record = await db.query(APIKey).filter_by(id=key_id,user_id=user_id).first() -> wrong
     result = await db.execute(
         select(APIKey).filter_by(id=key_id, user_id=user_id)
     )
@@ -69,44 +67,6 @@ async def revoke_api_key(db:AsyncSession, key_id:str, user_id:str)->str:
     await db.refresh(key_record)
     return f"user_id{user_id} key revoked successfully"
 
-# async def validate_api_key(db:AsyncSession, key:str) -> User:
-#     """
-#     Validates an API key by verifying it against stored hashes in the database.
-#     Returns the User associated with the valid key.
-#     """
-#     if not key.startswith("kmgg_live_"):
-#         raise AuthError("Invalid Key or No key match found")
-    
-#     try:
-#         # Query all active keys with user relationship eagerly loaded
-#         from sqlalchemy.orm import selectinload
-#         result = await db.execute(
-#             select(APIKey)
-#             .where(APIKey.is_active == True)
-#             .options(selectinload(APIKey.user))
-#         )
-#         active_keys = result.scalars().unique().all()
-        
-#         # Verify the incoming key against each stored hash
-#         for key_record in active_keys:
-#             try:
-#                 if verify_password(key, key_record.key_hash):
-#                     # Ensure user is loaded
-#                     user = key_record.user
-#                     if not user:
-#                         continue
-#                     return user
-#             except Exception:
-#                 # Skip if verification fails for this key
-#                 continue
-        
-#         raise AuthError("Invalid Key or No key match found")
-        
-#     except AuthError:
-#         raise
-#     except Exception as e:
-#         raise AuthError(f"Error validating API key: {str(e)}")
-
 from sqlalchemy.orm import selectinload
 from sqlalchemy import select
 
@@ -119,14 +79,14 @@ async def validate_api_key(db: AsyncSession, key: str) -> User:
         raise AuthError("Invalid Key or No key match found")
     
     try:
-        # 1. Extract the unique key identifier from the format: kmgg_live_ID_SECRET
+        #Extract the unique key identifier from the format: kmgg_live_ID_SECRET
         parts = key.split("_")
-        if len(parts) < 4:  # Adjust index if your prefix structure differs
+        if len(parts) < 4:
             raise AuthError("Invalid Key format")
             
-        key_id = parts[2]  # This is your database lookup index/prefix
+        key_id = parts[2]#important
 
-        # 2. Query exactly ONE row instead of loading the whole table
+        #exactly ONE row instead of loading the whole table
         result = await db.execute(
             select(APIKey)
             .where(APIKey.key_id == key_id, APIKey.is_active == True)

@@ -32,4 +32,4 @@ class APIKeyResponse(BaseModel):
     created_at: datetime
 
     class Config:
-        from_attributes = True  # Allows Pydantic to read SQLAlchemy models directly
+        from_attributes = True  # "If you are handed a database object instead of a dictionary, don't crash. Automatically extract the fields directly from the object attributes." -> definitio on this

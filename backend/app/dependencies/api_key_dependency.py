@@ -30,26 +30,3 @@ async def get_user_from_api_key(request: Request, api_key: str = Depends(api_key
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Failed to validate API Key"
         )
-
-
-# bearer_scheme = HTTPBearer(auto_error=False)
-# async def get_current_api_key_context(credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),db: AsyncSession = Depends(get_db))->APIKey:
-#     '''this dependency validates bearer token API Key against the DB.
-#     Attaches the verified key object (and its related user) to the request context.'''
-#     if not credentials or credentials.schema.lower() != "bearer":
-#         raise HTTPException(
-#             status_code=status.HTTP_401_UNAUTHORIZED,
-#             detail="Missing or invalid Authorization header scheme. Use 'Bearer <api_key>'",
-#             headers={"WWW-Authenticate": "Bearer"},
-#         )
-        
-#     try:
-#         raw_api_key = credentials.credentials
-#         key_record = await validate_api_key(db=db, key=raw_api_key)
-#         return key_record
-#     except AuthError as e:
-#         raise HTTPException(
-#             status_code=status.HTTP_401_UNAUTHORIZED,
-#             detail=str(e),
-#             headers={"WWW-Authenticate": "Bearer"},
-#         )

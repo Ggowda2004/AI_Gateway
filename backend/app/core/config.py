@@ -16,3 +16,6 @@ class Settings(BaseSettings):
 
     model_config = SettingsConfigDict(env_file=env_file_path,env_file_encoding = "utf-8", extra = "ignore")
 settings = Settings()
+
+
+# type safety, data validation, and fail-fast guarantees.
