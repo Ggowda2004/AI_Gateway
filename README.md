@@ -6,8 +6,8 @@ This project is still in active development, and the goal is to keep improving i
 
 ## Notes
 - A separate README is available inside the backend and frontend folders.
-- * [Backend Documentation](./backend/README.md)
-- * [Frontend Documentation](./frontend/README.md)
+- * [Backend Documentation](./backend/readme.md)
+- * [Frontend Documentation](./frontend/readme.md)
 - Docker support will be added later.
 - There are still several bugs and improvements I plan to solve in future updates.
 - The project is meant to be simple, flexible, and easy to build on.
